@@ -4,20 +4,17 @@ app = Flask(__name__)
 
 contacts = [{
     'id': 1,
-    'number': 9924580492,
-    'name': 'Mr. Goel',
+    'Name': u'Raju',
+    'Contact': u'9924580492',
     'done': False},
     {
         'id': 2,
-        'number': 9934896904,
-        'name': 'Mr. Gupta',
+        'Name': u'Rahul',
+        'Contact': u'9934896904',
         'done': False,
     }]
 
 @app.route('/')
-
-@app.route('/add-data', methods = ['POST'])
-
 
 def index():
     return jsonify({
@@ -25,24 +22,33 @@ def index():
         'message': 'Success!'
     }), 200
 
-def add_contact():
+@app.route('/add-data', methods = ['POST'])
+
+def add_data():
     if not request.json:
         return jsonify({
             'status': 'error', 
             'message': 'Please provide the data'
-        }),200
+        },400)
 
     contact = {
         'id': contacts[-1]['id']+1,
-        'title': request.json['title'],
-        'description': request.json.get('description', ''),
+        'Name': request.json['Name'],
+        'Contact': request.json.get('Contact', ''),
         'done': False
     }
 
     contacts.append(contact)
     return jsonify({
         'status': 'Success',
-        'message': 'Contact added successfully!'
-    }), 200
+        'message': 'Contact added successfully!',
+    },400)
+
+@app.route('/get-data')
+
+def get_data():
+    return jsonify({
+        'data': contacts
+    })
 
 app.run()
